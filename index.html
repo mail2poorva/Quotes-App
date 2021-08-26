@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quote App</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cuprum:wght@400;500;600;700&family=Parisienne&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assests/style.css" />
+  </head>
+  <body>
+    <div class="main">
+      <div class="container">
+        <div class="curl">
+          <button id="tweet">
+            <img src="./assests/images/twitter.png" alt="" />
+          </button>
+        </div>
+        <div id="quotes"></div>
+        <div id="author"></div>
+        <button id="btn">New Quotes</button>
+      </div>
+    </div>
+
+    <script>
+      const quotes = document.getElementById("quotes");
+      const author = document.getElementById("author");
+      const btn = document.getElementById("btn");
+      const tweet = document.getElementById("tweet");
+      let realdata = "";
+      let quotesData = "";
+
+      const tweetNow = () => {
+        let tweetPost = `https://twitter.com/intent/tweet?text=${quotesData.text} \t  By ${quotesData.author}`;
+        window.open(tweetPost);
+        // let tweetPost = "https://api.linkedin.com/v2/ugcPosts";
+      };
+      const getrandomtext = () => {
+        let num = Math.floor(Math.random() * 10);
+        quotesData = realdata[num];
+        quotes.innerText = `${quotesData.text}`;
+
+        quotesData.author == null
+          ? author.innerText == "By Unknown"
+          : (author.innerText = `By ${quotesData.author}`);
+      };
+
+      const getQuotes = async () => {
+        const api = "https://type.fit/api/quotes";
+        try {
+          let data = await fetch(api);
+          realdata = await data.json();
+
+          getrandomtext();
+        } catch (error) {}
+      };
+      tweet.addEventListener("click", tweetNow);
+      btn.addEventListener("click", getrandomtext);
+      getQuotes();
+    </script>
+  </body>
+</html>
